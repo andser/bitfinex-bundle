@@ -1,0 +1,20 @@
+{
+    "name": "andser/bitfinex-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony BitfinexBundle",
+    "keywords": ["Bitfinex", "Crypto", "API", "Trade"],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Andser\\BitfinexBundle\\": ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "": "Tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.1"
+    }
+}
