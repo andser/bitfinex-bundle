@@ -3,5 +3,5 @@ services:
         autowire: true
         public: false
 
-    App\:
+    Andser\BitfinexBundle\Service:
         resource: '../../Service/*'
