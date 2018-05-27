@@ -2,6 +2,7 @@
 
 namespace Andser\BitfinexBundle\Tests;
 
+use Andser\BitfinexBundle\Model\LendBook;
 use Andser\BitfinexBundle\Model\Stats;
 use Andser\BitfinexBundle\Model\Ticker;
 use Andser\BitfinexBundle\Service\Api;
@@ -92,6 +93,70 @@ class ApiTest extends TestCase
         $this->assertEquals(275148.09653645, $stats[2]->getVolume());
         $this->expectException(ClientException::class);
         $api->getStats('btcusd2');
+    }
+
+    /**
+     * @covers \Andser\BitfinexBundle\Service\Api::getLendBook()
+     */
+    public function testGetLendbook()
+    {
+        $json = '{
+           "bids":[
+              {
+                 "rate":"18.2537",
+                 "amount":"247368.42401616",
+                 "period":30,
+                 "timestamp":"1527449883.0",
+                 "frr":"No"
+              },
+              {
+                 "rate":"18.2504",
+                 "amount":"57385.36233362",
+                 "period":30,
+                 "timestamp":"1527446282.0",
+                 "frr":"Yes"
+              }
+           ],
+           "asks":[
+              {
+                 "rate":"18.2135",
+                 "amount":"1265.37940124",
+                 "period":2,
+                 "timestamp":"1527453291.0",
+                 "frr":"No"
+              },
+              {
+                 "rate":"19.4275",
+                 "amount":"59.97029939",
+                 "period":2,
+                 "timestamp":"1527453435.0",
+                 "frr":"Yes"
+              },
+              {
+                 "rate":"19.464",
+                 "amount":"420.0",
+                 "period":2,
+                 "timestamp":"1527453378.0",
+                 "frr":"No"
+              }
+           ]
+        }';
+        $json400 = '{"message": "Unknown currency"}';
+        $mock = new MockHandler([
+            new Response(200, [], $json),
+            new Response(400, [], $json400),
+        ]);
+        $api = $this->createApi($mock);
+        /** @var LendBook $lendbook */
+        $lendbook = $api->getLendBook('btcusd');
+        $this->assertInstanceOf(LendBook::class, $lendbook);
+        $this->assertCount(2, $lendbook->getBids());
+        $this->assertCount(3, $lendbook->getAsks());
+        $this->assertEquals(18.2537, $lendbook->getBids()[0]->getRate());
+        $this->assertEquals(247368.42401616, $lendbook->getBids()[0]->getAmount());
+        $this->assertEquals(30, $lendbook->getBids()[0]->getPeriod());
+        $this->assertEquals((new \DateTime())->setTimestamp(1527449883.0), $lendbook->getBids()[0]->getTimestamp());
+        $this->assertFalse($lendbook->getBids()[0]->hasFlashReturnRate());
     }
 
     /**

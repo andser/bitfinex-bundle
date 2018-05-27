@@ -2,6 +2,7 @@
 
 namespace Andser\BitfinexBundle\Service;
 
+use Andser\BitfinexBundle\Model\LendBook;
 use Andser\BitfinexBundle\Model\Stats;
 use Andser\BitfinexBundle\Model\Ticker;
 use GuzzleHttp\Client;
@@ -68,6 +69,24 @@ class Api
         $response = $this->client->get(sprintf('stats/%s', $symbol));
 
         return $this->deserialize($response->getBody()->getContents(), Stats::class.'[]');
+    }
+
+    /**
+     * @param string $currency
+     * @param int    $limitBids
+     * @param int    $limitAsks
+     *
+     * @return LendBook
+     */
+    public function getLendBook(string $currency, int $limitBids = 50, int $limitAsks = 50)
+    {
+        $query = http_build_query([
+            'limit_bids' => $limitBids,
+            'limit_asks' => $limitAsks,
+        ]);
+        $response = $this->client->get(sprintf('lendbook/%s?%s', $currency, $query));
+
+        return $this->deserialize($response->getBody()->getContents(), LendBook::class);
     }
 
     /**
