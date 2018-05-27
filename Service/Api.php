@@ -2,6 +2,7 @@
 
 namespace Andser\BitfinexBundle\Service;
 
+use Andser\BitfinexBundle\Model\Stats;
 use Andser\BitfinexBundle\Model\Ticker;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -55,6 +56,18 @@ class Api
         $response = $this->client->get(sprintf('pubticker/%s', $symbol));
 
         return $this->deserialize($response->getBody()->getContents(), Ticker::class);
+    }
+
+    /**
+     * @param string $symbol
+     *
+     * @return object
+     */
+    public function getStats(string $symbol)
+    {
+        $response = $this->client->get(sprintf('stats/%s', $symbol));
+
+        return $this->deserialize($response->getBody()->getContents(), Stats::class.'[]');
     }
 
     /**
