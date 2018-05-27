@@ -6,3 +6,4 @@ services:
 
     andser.bitfinex.api:
         class: Andser\BitfinexBundle\Service\Api
+        public: true
