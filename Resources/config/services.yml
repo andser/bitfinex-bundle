@@ -4,6 +4,8 @@ services:
         autoconfigure: true
         public: false
 
+    Andser\BitfinexBundle\Service\Api: ~
+
     andser.bitfinex.api:
-        class: Andser\BitfinexBundle\Service\Api
+        alias: Andser\BitfinexBundle\Service\Api
         public: true
