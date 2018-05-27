@@ -4,4 +4,4 @@ services:
         public: false
 
     App\:
-        resource: '../Service/*'
+        resource: '../../Service/*'
