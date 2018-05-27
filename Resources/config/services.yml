@@ -3,5 +3,5 @@ services:
         autowire: true
         public: false
 
-    Andser\BitfinexBundle\Service\:
-        resource: '../../Service/*'
+    andser.bitfinex.api:
+        class: Andser\BitfinexBundle\Service\Api
