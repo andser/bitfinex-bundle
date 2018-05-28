@@ -3,6 +3,7 @@
 namespace Andser\BitfinexBundle\Tests;
 
 use Andser\BitfinexBundle\Model\LendBook;
+use Andser\BitfinexBundle\Model\OrderBook;
 use Andser\BitfinexBundle\Model\Stats;
 use Andser\BitfinexBundle\Model\Ticker;
 use Andser\BitfinexBundle\Service\Api;
@@ -181,6 +182,54 @@ class ApiTest extends TestCase
         $this->assertEquals(2, $lendbook->getAsks()[2]->getPeriod());
         $this->assertEquals((new \DateTime())->setTimestamp(1527453378.0), $lendbook->getAsks()[2]->getTimestamp());
         $this->assertFalse($lendbook->getAsks()[2]->hasFlashReturnRate());
+        $this->expectException(ClientException::class);
+        $api->getLendBook('btcusd2');
+    }
+
+    public function testGetOrderBook()
+    {
+        $json = '{
+           "bids":[
+              {
+                 "price":"7207.2",
+                 "amount":"9.41706735",
+                 "timestamp":"1527533065.0"
+              },
+              {
+                 "price":"7206.9",
+                 "amount":"0.024",
+                 "timestamp":"1527533065.0"
+              }
+           ],
+           "asks":[
+              {
+                 "price":"7207.3",
+                 "amount":"3.90621616",
+                 "timestamp":"1527533065.0"
+              }
+           ]
+        }';
+        $json400 = '{"message": "Unknown symbol"}';
+        $mock = new MockHandler([
+            new Response(200, [], $json),
+            new Response(400, [], $json400),
+        ]);
+        $api = $this->createApi($mock);
+        $orderbook = $api->getOrderBook('btcusd');
+        $this->assertInstanceOf(OrderBook::class, $orderbook);
+        $this->assertCount(2, $orderbook->getBids());
+        $this->assertCount(1, $orderbook->getAsks());
+        $this->assertEquals(9.41706735, $orderbook->getBids()[0]->getAmount());
+        $this->assertEquals(7207.2, $orderbook->getBids()[0]->getPrice());
+        $this->assertEquals((new \DateTime())->setTimestamp(1527533065.0), $orderbook->getBids()[0]->getTimestamp());
+        $this->assertEquals(0.024, $orderbook->getBids()[1]->getAmount());
+        $this->assertEquals(7206.9, $orderbook->getBids()[1]->getPrice());
+        $this->assertEquals((new \DateTime())->setTimestamp(1527533065.0), $orderbook->getBids()[1]->getTimestamp());
+        $this->assertEquals(3.90621616, $orderbook->getAsks()[0]->getAmount());
+        $this->assertEquals(7207.3, $orderbook->getAsks()[0]->getPrice());
+        $this->assertEquals((new \DateTime())->setTimestamp(1527533065.0), $orderbook->getAsks()[0]->getTimestamp());
+        $this->expectException(ClientException::class);
+        $api->getOrderBook('btcusd2');
     }
 
     /**

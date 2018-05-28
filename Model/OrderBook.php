@@ -7,21 +7,21 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
- * Class LendBook
+ * Class OrderBook
  */
-class LendBook
+class OrderBook
 {
     /**
-     * Array of funding bids
+     * Array of bids
      *
-     * @var Lend[]
+     * @var Order[]
      */
     private $bids = [];
 
     /**
-     * Array of funding offers
+     * Array of asks
      *
-     * @var Lend[]
+     * @var Order[]
      */
     private $asks = [];
 
@@ -39,7 +39,7 @@ class LendBook
     }
 
     /**
-     * @return Lend[]
+     * @return Order[]
      */
     public function getBids(): array
     {
@@ -47,17 +47,17 @@ class LendBook
     }
 
     /**
-     * @param Lend[] $bidsArray
+     * @param Order[] $bidsArray
      */
     public function setBids(array $bidsArray)
     {
-        $this->bids = array_map(function ($lendArray) {
-            return $this->serializer->denormalize($lendArray, Lend::class);
+        $this->bids = array_map(function ($orderArray) {
+            return $this->serializer->denormalize($orderArray, Order::class);
         }, $bidsArray);
     }
 
     /**
-     * @return Lend[]
+     * @return Order[]
      */
     public function getAsks(): array
     {
@@ -69,8 +69,8 @@ class LendBook
      */
     public function setAsks(array $asksArray)
     {
-        $this->asks = array_map(function ($lendArray) {
-            return $this->serializer->denormalize($lendArray, Lend::class);
+        $this->asks = array_map(function ($orderArray) {
+            return $this->serializer->denormalize($orderArray, Order::class);
         }, $asksArray);
     }
 }
