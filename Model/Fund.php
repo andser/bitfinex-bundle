@@ -3,9 +3,9 @@
 namespace Andser\BitfinexBundle\Model;
 
 /**
- * Class Lend
+ * Class Fund
  */
-class Lend
+class Fund
 {
     /**
      * Rate in % per 365 days

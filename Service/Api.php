@@ -2,7 +2,7 @@
 
 namespace Andser\BitfinexBundle\Service;
 
-use Andser\BitfinexBundle\Model\LendBook;
+use Andser\BitfinexBundle\Model\FundingBook;
 use Andser\BitfinexBundle\Model\OrderBook;
 use Andser\BitfinexBundle\Model\Stats;
 use Andser\BitfinexBundle\Model\Ticker;
@@ -78,9 +78,9 @@ class Api
      * @param int    $limitBids
      * @param int    $limitAsks
      *
-     * @return LendBook
+     * @return FundingBook
      */
-    public function getLendBook(string $currency, int $limitBids = 50, int $limitAsks = 50)
+    public function getFundingBook(string $currency, int $limitBids = 50, int $limitAsks = 50)
     {
         $query = http_build_query([
             'limit_bids' => $limitBids,
@@ -88,7 +88,7 @@ class Api
         ]);
         $response = $this->client->get(sprintf('lendbook/%s?%s', $currency, $query));
 
-        return $this->deserialize($response->getBody()->getContents(), LendBook::class);
+        return $this->deserialize($response->getBody()->getContents(), FundingBook::class);
     }
 
     /**

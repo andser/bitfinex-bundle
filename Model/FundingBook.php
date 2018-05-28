@@ -7,21 +7,21 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
- * Class LendBook
+ * Class FundingBook
  */
-class LendBook
+class FundingBook
 {
     /**
      * Array of funding bids
      *
-     * @var Lend[]
+     * @var Fund[]
      */
     private $bids = [];
 
     /**
      * Array of funding offers
      *
-     * @var Lend[]
+     * @var Fund[]
      */
     private $asks = [];
 
@@ -31,7 +31,7 @@ class LendBook
     private $serializer;
 
     /**
-     * LendBook constructor.
+     * FundingBook constructor.
      */
     public function __construct()
     {
@@ -39,7 +39,7 @@ class LendBook
     }
 
     /**
-     * @return Lend[]
+     * @return Fund[]
      */
     public function getBids(): array
     {
@@ -47,17 +47,17 @@ class LendBook
     }
 
     /**
-     * @param Lend[] $bidsArray
+     * @param Fund[] $bidsArray
      */
     public function setBids(array $bidsArray)
     {
-        $this->bids = array_map(function ($lendArray) {
-            return $this->serializer->denormalize($lendArray, Lend::class);
+        $this->bids = array_map(function ($fundArray) {
+            return $this->serializer->denormalize($fundArray, Fund::class);
         }, $bidsArray);
     }
 
     /**
-     * @return Lend[]
+     * @return Fund[]
      */
     public function getAsks(): array
     {
@@ -69,8 +69,8 @@ class LendBook
      */
     public function setAsks(array $asksArray)
     {
-        $this->asks = array_map(function ($lendArray) {
-            return $this->serializer->denormalize($lendArray, Lend::class);
+        $this->asks = array_map(function ($fundArray) {
+            return $this->serializer->denormalize($fundArray, Fund::class);
         }, $asksArray);
     }
 }

@@ -31,7 +31,7 @@ class OrderBook
     private $serializer;
 
     /**
-     * LendBook constructor.
+     * OrderBook constructor.
      */
     public function __construct()
     {

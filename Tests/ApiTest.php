@@ -2,7 +2,7 @@
 
 namespace Andser\BitfinexBundle\Tests;
 
-use Andser\BitfinexBundle\Model\LendBook;
+use Andser\BitfinexBundle\Model\FundingBook;
 use Andser\BitfinexBundle\Model\OrderBook;
 use Andser\BitfinexBundle\Model\Stats;
 use Andser\BitfinexBundle\Model\Ticker;
@@ -98,9 +98,9 @@ class ApiTest extends TestCase
     }
 
     /**
-     * @covers \Andser\BitfinexBundle\Service\Api::getLendBook()
+     * @covers \Andser\BitfinexBundle\Service\Api::getFundingBook()
      */
-    public function testGetLendbook()
+    public function testGetFundingBook()
     {
         $json = '{
            "bids":[
@@ -149,42 +149,42 @@ class ApiTest extends TestCase
             new Response(400, [], $json400),
         ]);
         $api = $this->createApi($mock);
-        /** @var LendBook $lendbook */
-        $lendbook = $api->getLendBook('btcusd');
-        $this->assertInstanceOf(LendBook::class, $lendbook);
-        $this->assertCount(2, $lendbook->getBids());
-        $this->assertCount(3, $lendbook->getAsks());
-        $this->assertEquals(18.2537, $lendbook->getBids()[0]->getRate());
-        $this->assertEquals(247368.42401616, $lendbook->getBids()[0]->getAmount());
-        $this->assertEquals(30, $lendbook->getBids()[0]->getPeriod());
-        $this->assertEquals((new \DateTime())->setTimestamp(1527449883.0), $lendbook->getBids()[0]->getTimestamp());
-        $this->assertFalse($lendbook->getBids()[0]->hasFlashReturnRate());
+        /** @var FundingBook $lendbook */
+        $fundingbook = $api->getFundingBook('btcusd');
+        $this->assertInstanceOf(FundingBook::class, $fundingbook);
+        $this->assertCount(2, $fundingbook->getBids());
+        $this->assertCount(3, $fundingbook->getAsks());
+        $this->assertEquals(18.2537, $fundingbook->getBids()[0]->getRate());
+        $this->assertEquals(247368.42401616, $fundingbook->getBids()[0]->getAmount());
+        $this->assertEquals(30, $fundingbook->getBids()[0]->getPeriod());
+        $this->assertEquals((new \DateTime())->setTimestamp(1527449883.0), $fundingbook->getBids()[0]->getTimestamp());
+        $this->assertFalse($fundingbook->getBids()[0]->hasFlashReturnRate());
 
-        $this->assertEquals(18.2504, $lendbook->getBids()[1]->getRate());
-        $this->assertEquals(57385.36233362, $lendbook->getBids()[1]->getAmount());
-        $this->assertEquals(30, $lendbook->getBids()[1]->getPeriod());
-        $this->assertEquals((new \DateTime())->setTimestamp(1527446282.0), $lendbook->getBids()[1]->getTimestamp());
-        $this->assertTrue($lendbook->getBids()[1]->hasFlashReturnRate());
+        $this->assertEquals(18.2504, $fundingbook->getBids()[1]->getRate());
+        $this->assertEquals(57385.36233362, $fundingbook->getBids()[1]->getAmount());
+        $this->assertEquals(30, $fundingbook->getBids()[1]->getPeriod());
+        $this->assertEquals((new \DateTime())->setTimestamp(1527446282.0), $fundingbook->getBids()[1]->getTimestamp());
+        $this->assertTrue($fundingbook->getBids()[1]->hasFlashReturnRate());
 
-        $this->assertEquals(18.2135, $lendbook->getAsks()[0]->getRate());
-        $this->assertEquals(1265.37940124, $lendbook->getAsks()[0]->getAmount());
-        $this->assertEquals(2, $lendbook->getAsks()[0]->getPeriod());
-        $this->assertEquals((new \DateTime())->setTimestamp(1527453291.0), $lendbook->getAsks()[0]->getTimestamp());
-        $this->assertFalse($lendbook->getAsks()[0]->hasFlashReturnRate());
+        $this->assertEquals(18.2135, $fundingbook->getAsks()[0]->getRate());
+        $this->assertEquals(1265.37940124, $fundingbook->getAsks()[0]->getAmount());
+        $this->assertEquals(2, $fundingbook->getAsks()[0]->getPeriod());
+        $this->assertEquals((new \DateTime())->setTimestamp(1527453291.0), $fundingbook->getAsks()[0]->getTimestamp());
+        $this->assertFalse($fundingbook->getAsks()[0]->hasFlashReturnRate());
 
-        $this->assertEquals(19.4275, $lendbook->getAsks()[1]->getRate());
-        $this->assertEquals(59.97029939, $lendbook->getAsks()[1]->getAmount());
-        $this->assertEquals(2, $lendbook->getAsks()[1]->getPeriod());
-        $this->assertEquals((new \DateTime())->setTimestamp(1527453435.0), $lendbook->getAsks()[1]->getTimestamp());
-        $this->assertTrue($lendbook->getAsks()[1]->hasFlashReturnRate());
+        $this->assertEquals(19.4275, $fundingbook->getAsks()[1]->getRate());
+        $this->assertEquals(59.97029939, $fundingbook->getAsks()[1]->getAmount());
+        $this->assertEquals(2, $fundingbook->getAsks()[1]->getPeriod());
+        $this->assertEquals((new \DateTime())->setTimestamp(1527453435.0), $fundingbook->getAsks()[1]->getTimestamp());
+        $this->assertTrue($fundingbook->getAsks()[1]->hasFlashReturnRate());
 
-        $this->assertEquals(19.464, $lendbook->getAsks()[2]->getRate());
-        $this->assertEquals(420.0, $lendbook->getAsks()[2]->getAmount());
-        $this->assertEquals(2, $lendbook->getAsks()[2]->getPeriod());
-        $this->assertEquals((new \DateTime())->setTimestamp(1527453378.0), $lendbook->getAsks()[2]->getTimestamp());
-        $this->assertFalse($lendbook->getAsks()[2]->hasFlashReturnRate());
+        $this->assertEquals(19.464, $fundingbook->getAsks()[2]->getRate());
+        $this->assertEquals(420.0, $fundingbook->getAsks()[2]->getAmount());
+        $this->assertEquals(2, $fundingbook->getAsks()[2]->getPeriod());
+        $this->assertEquals((new \DateTime())->setTimestamp(1527453378.0), $fundingbook->getAsks()[2]->getTimestamp());
+        $this->assertFalse($fundingbook->getAsks()[2]->hasFlashReturnRate());
         $this->expectException(ClientException::class);
-        $api->getLendBook('btcusd2');
+        $api->getFundingBook('btcusd2');
     }
 
     /**
