@@ -6,6 +6,7 @@ use Andser\BitfinexBundle\Model\LendBook;
 use Andser\BitfinexBundle\Model\OrderBook;
 use Andser\BitfinexBundle\Model\Stats;
 use Andser\BitfinexBundle\Model\Ticker;
+use Andser\BitfinexBundle\Model\Trade;
 use Andser\BitfinexBundle\Service\Api;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -186,6 +187,9 @@ class ApiTest extends TestCase
         $api->getLendBook('btcusd2');
     }
 
+    /**
+     * @covers \Andser\BitfinexBundle\Service\Api::getOrderBook()
+     */
     public function testGetOrderBook()
     {
         $json = '{
@@ -230,6 +234,57 @@ class ApiTest extends TestCase
         $this->assertEquals((new \DateTime())->setTimestamp(1527533065.0), $orderbook->getAsks()[0]->getTimestamp());
         $this->expectException(ClientException::class);
         $api->getOrderBook('btcusd2');
+    }
+
+    /**
+     * @covers \Andser\BitfinexBundle\Service\Api::getTrades()
+     */
+    public function testGetTrades()
+    {
+        $json = '[
+           {
+              "timestamp":1527534721,
+              "tid":251147276,
+              "price":"7215.1",
+              "amount":"0.06052527",
+              "exchange":"bitfinex",
+              "type":"buy"
+           },
+           {
+              "timestamp":1527534721,
+              "tid":251147275,
+              "price":"7215.1",
+              "amount":"0.03947473",
+              "exchange":"bitfinex",
+              "type":"sell"
+           }
+        ]';
+        $json400 = '{"message": "Unknown symbol"}';
+        $mock = new MockHandler([
+            new Response(200, [], $json),
+            new Response(400, [], $json400),
+        ]);
+        $api = $this->createApi($mock);
+        $trades = $api->getTrades('btcusd');
+        $this->assertInternalType('array', $trades);
+        $this->assertCount(2, $trades);
+        $this->assertInstanceOf(Trade::class, $trades[0]);
+        $this->assertInstanceOf(Trade::class, $trades[1]);
+        $this->assertEquals((new \DateTime())->setTimestamp(1527534721), $trades[0]->getTimestamp());
+        $this->assertEquals(251147276, $trades[0]->getTid());
+        $this->assertEquals(7215.1, $trades[0]->getPrice());
+        $this->assertEquals(0.06052527, $trades[0]->getAmount());
+        $this->assertEquals('bitfinex', $trades[0]->getExchange());
+        $this->assertTrue($trades[0]->isBuy());
+        $this->assertFalse($trades[0]->isSell());
+
+        $this->assertEquals((new \DateTime())->setTimestamp(1527534721), $trades[1]->getTimestamp());
+        $this->assertEquals(251147275, $trades[1]->getTid());
+        $this->assertEquals(7215.1, $trades[1]->getPrice());
+        $this->assertEquals(0.03947473, $trades[1]->getAmount());
+        $this->assertEquals('bitfinex', $trades[1]->getExchange());
+        $this->assertFalse($trades[1]->isBuy());
+        $this->assertTrue($trades[1]->isSell());
     }
 
     /**

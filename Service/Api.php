@@ -6,6 +6,7 @@ use Andser\BitfinexBundle\Model\LendBook;
 use Andser\BitfinexBundle\Model\OrderBook;
 use Andser\BitfinexBundle\Model\Stats;
 use Andser\BitfinexBundle\Model\Ticker;
+use Andser\BitfinexBundle\Model\Trade;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -108,6 +109,24 @@ class Api
         $response = $this->client->get(sprintf('book/%s?%s', $symbol, $query));
 
         return $this->deserialize($response->getBody()->getContents(), OrderBook::class);
+    }
+
+    /**
+     * @param string         $symbol
+     * @param \DateTime|null $time
+     * @param int            $limitTrades
+     *
+     * @return Trade[]
+     */
+    public function getTrades(string $symbol, \DateTime $time = null, int $limitTrades = 50)
+    {
+        $query = http_build_query(array_filter([
+            'limit_trades' => $limitTrades,
+            'timestamp' => $time ? $time->getTimestamp() : null,
+        ]));
+        $response = $this->client->get(sprintf('trades/%s?%s', $symbol, $query));
+
+        return $this->deserialize($response->getBody()->getContents(), Trade::class.'[]');
     }
 
     /**
