@@ -48,10 +48,14 @@ class Fund
 
     /**
      * @param float $rate
+     *
+     * @return Fund
      */
-    public function setRate(float $rate)
+    public function setRate(float $rate): Fund
     {
         $this->rate = $rate;
+
+        return $this;
     }
 
     /**
@@ -64,10 +68,14 @@ class Fund
 
     /**
      * @param float $amount
+     *
+     * @return Fund
      */
-    public function setAmount(float $amount)
+    public function setAmount(float $amount): Fund
     {
         $this->amount = $amount;
+
+        return $this;
     }
 
     /**
@@ -80,10 +88,14 @@ class Fund
 
     /**
      * @param int $period
+     *
+     * @return Fund
      */
-    public function setPeriod(int $period)
+    public function setPeriod(int $period): Fund
     {
         $this->period = $period;
+
+        return $this;
     }
 
     /**
@@ -96,10 +108,14 @@ class Fund
 
     /**
      * @param string $timestamp
+     *
+     * @return Fund
      */
-    public function setTimestamp(string $timestamp)
+    public function setTimestamp(string $timestamp): Fund
     {
         $this->timestamp = (new \DateTime())->setTimestamp($timestamp);
+
+        return $this;
     }
 
     /**
@@ -112,19 +128,27 @@ class Fund
 
     /**
      * @param bool $flashReturnRate
+     *
+     * @return Fund
      */
-    public function setFlashReturnRate(bool $flashReturnRate)
+    public function setFlashReturnRate(bool $flashReturnRate): Fund
     {
         $this->flashReturnRate = $flashReturnRate;
+
+        return $this;
     }
 
     /**
      * Alias for serializer
      *
      * @param string $frr
+     *
+     * @return Fund
      */
-    public function setFrr(string $frr)
+    public function setFrr(string $frr): Fund
     {
         $this->setFlashReturnRate($frr === 'Yes');
+
+        return $this;
     }
 }

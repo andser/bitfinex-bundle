@@ -32,10 +32,14 @@ class Order
 
     /**
      * @param float $price
+     *
+     * @return Order
      */
-    public function setPrice(float $price)
+    public function setPrice(float $price): Order
     {
         $this->price = $price;
+
+        return $this;
     }
 
     /**
@@ -48,10 +52,14 @@ class Order
 
     /**
      * @param float $amount
+     *
+     * @return Order
      */
-    public function setAmount(float $amount)
+    public function setAmount(float $amount): Order
     {
         $this->amount = $amount;
+
+        return $this;
     }
 
     /**
@@ -64,9 +72,13 @@ class Order
 
     /**
      * @param string $timestamp
+     *
+     * @return Order
      */
-    public function setTimestamp(string $timestamp)
+    public function setTimestamp(string $timestamp): Order
     {
         $this->timestamp = (new \DateTime())->setTimestamp($timestamp);
+
+        return $this;
     }
 }

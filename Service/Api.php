@@ -3,12 +3,15 @@
 namespace Andser\BitfinexBundle\Service;
 
 use Andser\BitfinexBundle\Model\FundingBook;
+use Andser\BitfinexBundle\Model\Lend;
 use Andser\BitfinexBundle\Model\OrderBook;
 use Andser\BitfinexBundle\Model\Stats;
+use Andser\BitfinexBundle\Model\Symbol;
 use Andser\BitfinexBundle\Model\Ticker;
 use Andser\BitfinexBundle\Model\Trade;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -40,10 +43,10 @@ class Api
     /**
      * Api constructor.
      *
-     * @param SerializerInterface  $serializer
+     * @param Serializer           $serializer
      * @param ClientInterface|null $client
      */
-    public function __construct(SerializerInterface $serializer, ClientInterface $client = null)
+    public function __construct(Serializer $serializer, ClientInterface $client = null)
     {
         $this->client = $client ?: new Client($this->options);
         $this->serializer = $serializer;
@@ -127,6 +130,44 @@ class Api
         $response = $this->client->get(sprintf('trades/%s?%s', $symbol, $query));
 
         return $this->deserialize($response->getBody()->getContents(), Trade::class.'[]');
+    }
+
+    /**
+     * @param string         $currency
+     * @param \DateTime|null $time
+     * @param int            $limitLends
+     *
+     * @return Lend[]
+     */
+    public function getLends(string $currency, \DateTime $time = null, int $limitLends = 50)
+    {
+        $query = http_build_query(array_filter([
+            'limit_lends' => $limitLends,
+            'timestamp' => $time ? $time->getTimestamp() : null,
+        ]));
+        $response = $this->client->get(sprintf('lends/%s?%s', $currency, $query));
+
+        return $this->deserialize($response->getBody()->getContents(), Lend::class.'[]');
+    }
+
+    /**
+     * @return array
+     */
+    public function getSymbols()
+    {
+        $response = $this->client->get('symbols');
+
+        return $this->serializer->decode($response->getBody()->getContents(), 'json');
+    }
+
+    /**
+     * @return Symbol[]
+     */
+    public function getSymbolsDetails()
+    {
+        $response = $this->client->get('symbols_details');
+
+        return $this->deserialize($response->getBody()->getContents(), Symbol::class.'[]');
     }
 
     /**

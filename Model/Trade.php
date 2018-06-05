@@ -47,10 +47,14 @@ class Trade
 
     /**
      * @param string $timestamp
+     *
+     * @return Trade
      */
-    public function setTimestamp(string $timestamp)
+    public function setTimestamp(string $timestamp): Trade
     {
         $this->timestamp = (new \DateTime())->setTimestamp($timestamp);
+
+        return $this;
     }
 
     /**
@@ -63,10 +67,14 @@ class Trade
 
     /**
      * @param int $tid
+     *
+     * @return Trade
      */
-    public function setTid(int $tid)
+    public function setTid(int $tid): Trade
     {
         $this->tid = $tid;
+
+        return $this;
     }
 
     /**
@@ -79,10 +87,14 @@ class Trade
 
     /**
      * @param float $price
+     *
+     * @return Trade
      */
-    public function setPrice(float $price)
+    public function setPrice(float $price): Trade
     {
         $this->price = $price;
+
+        return $this;
     }
 
     /**
@@ -95,10 +107,14 @@ class Trade
 
     /**
      * @param float $amount
+     *
+     * @return Trade
      */
-    public function setAmount(float $amount)
+    public function setAmount(float $amount): Trade
     {
         $this->amount = $amount;
+
+        return $this;
     }
 
     /**
@@ -111,10 +127,14 @@ class Trade
 
     /**
      * @param string $exchange
+     *
+     * @return Trade
      */
-    public function setExchange(string $exchange)
+    public function setExchange(string $exchange): Trade
     {
         $this->exchange = $exchange;
+
+        return $this;
     }
 
     /**
@@ -127,10 +147,14 @@ class Trade
 
     /**
      * @param string $type
+     *
+     * @return Trade
      */
-    public function setType(string $type)
+    public function setType(string $type): Trade
     {
         $this->type = $type;
+
+        return $this;
     }
 
     /**
